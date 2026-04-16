@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+    <title>Kisha &amp; Arpit Wedding 💍</title>
+  </head>
+  <body x-data="weddingApp" x-init="init()">
+
+    <header class="app-header">
+      <div class="header-flowers">🪔 💐 🌸</div>
+      <div class="header-couple">Kisha &amp; Arpit</div>
+      <div class="header-dates">April 16 – 19 · 2025</div>
+    </header>
+
+    <nav class="tab-bar">
+      <template x-for="day in days" :key="day.id">
+        <button
+          class="tab"
+          :class="{ active: activeDay === day.id }"
+          @click="activeDay = day.id"
+        >
+          <span class="tab-label" x-text="day.label"></span>
+          <span class="tab-name" x-text="day.name"></span>
+        </button>
+      </template>
+    </nav>
+
+    <template x-for="day in days" :key="day.id">
+      <div class="event-list" x-show="activeDay === day.id">
+        <template x-for="event in eventsForDay(day.id)" :key="event.id ?? (event.type + (event.text ?? event.title))">
+
+          <template x-if="event.type === 'section'">
+            <div class="section-header" x-text="event.title"></div>
+          </template>
+
+          <template x-if="event.type === 'note'">
+            <div class="note-banner" x-text="event.text"></div>
+          </template>
+
+          <template x-if="!event.type">
+            <div :class="cardClass(event)" @click="event.id && toggle(event.id)">
+
+              <div class="event-time" x-text="formatTime(event)"></div>
+
+              <div class="event-info">
+                <div class="event-title" x-text="event.title"></div>
+
+                <template x-if="event.location">
+                  <div class="event-location">📍 <span x-text="event.location"></span></div>
+                </template>
+
+                <template x-if="event.owner">
+                  <div class="event-owner" x-text="event.owner"></div>
+                </template>
+
+                <template x-if="event.notes">
+                  <div class="event-notes" x-text="event.notes"></div>
+                </template>
+
+                <template x-if="event.group === 'cousins-friends' || event.group === 'all'">
+                  <div class="event-tag">★ Your group</div>
+                </template>
+              </div>
+
+              <template x-if="event.id">
+                <div class="check-btn">
+                  <span x-show="isAttended(event.id)">✓</span>
+                </div>
+              </template>
+
+            </div>
+          </template>
+
+        </template>
+      </div>
+    </template>
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
