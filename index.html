@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+    <title>Kisha &amp; Arpit Wedding 💍</title>
+    <script type="module" crossorigin src="./assets/index-BjECy2Ov.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/index-CHD8VcrK.css">
+  </head>
+  <body x-data="weddingApp" x-init="init()">
+
+    <header class="app-header">
+      <div class="header-flowers">🪔 💐 🌸</div>
+      <div class="header-couple">Kisha &amp; Arpit</div>
+      <div class="header-dates">April 16 – 19 · 2025</div>
+    </header>
+
+    <nav class="tab-bar">
+      <template x-for="day in days" :key="day.id">
+        <button
+          class="tab"
+          :class="{ active: activeDay === day.id }"
+          @click="activeDay = day.id"
+        >
+          <span class="tab-label" x-text="day.label"></span>
+          <span class="tab-name" x-text="day.name"></span>
+        </button>
+      </template>
+    </nav>
+
+    <template x-for="day in days" :key="day.id">
+      <div class="event-list" x-show="activeDay === day.id">
+        <template x-for="event in eventsForDay(day.id)" :key="event.id ?? (event.type + (event.text ?? event.title))">
+          <!-- single root wrapper required by Alpine x-for; display:contents keeps flex layout intact -->
+          <div style="display:contents">
+
+            <div class="section-header" x-show="event.type === 'section'" x-text="event.title"></div>
+
+            <div class="note-banner" x-show="event.type === 'note'" x-text="event.text"></div>
+
+            <div x-show="!event.type" :class="cardClass(event)" @click="event.id && toggle(event.id)">
+
+              <div class="event-time" x-text="formatTime(event)"></div>
+
+              <div class="event-info">
+                <div class="event-title" x-text="event.title"></div>
+                <div class="event-location" x-show="event.location">📍 <span x-text="event.location"></span></div>
+                <div class="event-owner" x-show="event.owner" x-text="event.owner"></div>
+                <div class="event-notes" x-show="event.notes" x-text="event.notes"></div>
+                <div class="event-tag" x-show="event.group === 'cousins-friends' || event.group === 'all'">★ Your group</div>
+              </div>
+
+              <div class="check-btn" x-show="event.id">
+                <span x-show="event.id && isAttended(event.id)">✓</span>
+              </div>
+
+            </div>
+          </div>
+        </template>
+      </div>
+    </template>
+
+  </body>
+</html>
